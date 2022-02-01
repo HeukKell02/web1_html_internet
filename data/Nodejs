@@ -1,0 +1,14 @@
+<strong style="color:rgb(106, 140, 196); font-weight: 600;">js 를 웹브라우져가 아닌 다른 환경에서 실행 시켜 주는 통합개발환경 IDE</strong>
+<ul>
+    <li>npm</li>
+    <li>npx</li>
+    <li>module
+        <ul>
+            <li>fs<ul><li>FileSystem</li></ul></li>
+            <li>http<ul><li>webserver</li></ul></li>    
+            <li>express<ul><li>webserver</li></ul></li>
+            <li>pm2<ul><li>process manager</li></ul></li>
+        </ul>
+    </li>
+    
+</ul>
