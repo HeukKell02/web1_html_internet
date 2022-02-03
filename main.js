@@ -38,7 +38,13 @@ const app = http.createServer((request,response)=>{
                     var title = queryData.id;
                     var template = templatelib.templeteHTML(title,list,
                         `<h2>${title}</h2><p>${description}</p>`,
-                        `<a href="/create">create<a> <a href="/update?id=${title}">update<a>`);                
+                        `<a href="/create">create<a>
+                         <a href="/update?id=${title}">update<a>
+                         <form action="/delete_process" method="post">
+                            <input type="hidden" name="id" value="${title}">
+                            <input type="submit" value="delete">
+                         </form>
+                         `);                
              
                     response.writeHead(200);
                     response.end(template);
@@ -88,7 +94,7 @@ const app = http.createServer((request,response)=>{
 
                 }
                 else{
-                    response.writeHead(302,{Location:`/?id=${title}`});
+                    response.writeHead(302,{Location:`/?id=${title}`}); //redirection, 페이지 이동.
                     response.end();
                     console.log(`success file write "${title}"`);
                 }
@@ -140,11 +146,33 @@ const app = http.createServer((request,response)=>{
                 fs.writeFile(`data/${NewFileName}`,description,`utf8`,(err)=>{
                     if(err){/*에러처리 해야함 */};
 
-                    response.writeHead(302,{Location:`/?id=${NewFileName}`});
+                    response.writeHead(302,{Location:`/?id=${NewFileName}`}); //redirection, 페이지 이동.
                     response.end();
                 })
             })
         })
+    }
+    else if(pathname === '/delete_process')
+    {   
+        var body = '';
+
+        request.on('data',(data)=>{
+            // 조각난 데이터 받기
+            body += data;
+        })
+        request.on('end',()=>{
+            var updatedData = qs.parse(body); // body 를 분석한 데이터를 받아.
+            // {id} 만 담겨있다.
+            var deleteFileName = updatedData.id;
+            
+            fs.unlink(`data/${deleteFileName}`,(err)=>{
+                if(err){/*에러 코드 작성*/}
+
+                response.writeHead(302,{Location:`/`}); //redirection, 페이지 이동.
+                response.end();
+            })
+        })
+
     }
     else{
         response.writeHead(404);
